@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: foco-15-app
+    env: docker
+    plan: free
+    region: ohio
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        sync: false # Você deverá preencher o APP_KEY no painel do Render depois
+      - key: APP_URL
+        generateValue: true # O Render vai preencher automaticamente com a URL do app
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        fromDatabase:
+          name: foco-15-database
+          property: connectionString
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+
+databases:
+  - name: foco-15-database
+    databaseName: foco15
+    user: foco15
+    plan: free
+    region: ohio
