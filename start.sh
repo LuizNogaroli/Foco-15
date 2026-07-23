@@ -6,6 +6,7 @@ set -e
 echo "Rodando as migrations do banco de dados..."
 # O --force é necessário em produção para não pedir confirmação
 php artisan migrate --force
+php artisan db:seed --force
 
 echo "Limpando caches do Laravel..."
 php artisan optimize:clear
