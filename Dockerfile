@@ -36,8 +36,9 @@ COPY . .
 
 # Instalar dependências do PHP e Node.js.
 # O diretório bootstrap/cache precisa existir para o package:discover funcionar
+# Criamos um .env temporário com um APP_KEY genérico para o build passar
 RUN mkdir -p bootstrap/cache \
-    && cp .env.example .env \
+    && echo "APP_KEY=base64:4/j7n22vP5XfC/vS9B8VfQc/x+X1cW6c6jQ/T0qK8+o=" > .env \
     && composer install --no-dev --optimize-autoloader \
     && rm .env
 
