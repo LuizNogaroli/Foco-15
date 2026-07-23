@@ -36,8 +36,9 @@ COPY . .
 
 # Instalar dependências do PHP e Node.js.
 # O diretório bootstrap/cache precisa existir para o package:discover funcionar
+# As pastas do storage/framework precisam existir para o optimize:clear funcionar
 # Criamos um .env temporário com um APP_KEY genérico para o build passar
-RUN mkdir -p bootstrap/cache \
+RUN mkdir -p bootstrap/cache storage/framework/views storage/framework/cache storage/framework/sessions \
     && echo "APP_KEY=base64:4/j7n22vP5XfC/vS9B8VfQc/x+X1cW6c6jQ/T0qK8+o=" > .env \
     && composer install --no-dev --optimize-autoloader \
     && rm .env
