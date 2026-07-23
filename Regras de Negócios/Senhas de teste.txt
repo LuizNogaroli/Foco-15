@@ -1,0 +1,54 @@
+Senhas de teste
+
+Nome: Luiz Admin	
+E-mail: admin@spu.gov.br	
+CPF: 123.456.789-01	
+Perfil: Direção
+
+
+Técnico Destinação
+destinacao@spu.gov.br
+234.567.890-12
+Equipe Destinação
+
+Técnico Caracterização
+caracterizacao@spu.gov.br
+345.678.901-23
+Equipe Caracterização
+
+Chefia SPU/SP
+chefia@spu.gov.br
+456.789.012-34
+Chefia
+
+Coordenação SPU/SP
+coordenacao@spu.gov.br
+567.890.123-45
+Coordenação
+
+Superintendente SP
+superintendencia@spu.gov.br
+678.901.234-56
+Superintendência
+
+Equipe C.G.
+cg@spu.gov.br
+789.012.345-67
+Equipe C.G.
+
+Coordenação-Geral
+coordgeral@spu.gov.br
+890.123.456-78
+Coordenação-Geral
+
+Diretor SPU
+direcao@spu.gov.br
+901.234.567-89
+Direção
+
+CDE
+cde@spu.gov.br
+012.345.678-90
+CDE
+
+Senha de todos: password

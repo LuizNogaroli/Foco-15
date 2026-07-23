@@ -1,0 +1,61 @@
+    <form method="POST" action="{{ route('processos.tramitar', $processo->id) }}" id="form03">
+        @csrf
+        <input type="hidden" name="aba_atual" value="3">
+        <input type="hidden" name="next_aba" value="index">
+        <!-- ========== ACCORDIONS DE REVISÃO (ABAS 1 E 2) ========== -->
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
+          <!-- ABA 1 -->
+          <div style="border: 2px solid #1e3a5f; border-radius: 8px; overflow: hidden; background: #fff;">
+            <div style="background-color: #1e3a5f; color: white; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.1em;" onclick="const body = this.nextElementSibling; const icon = this.querySelector('span:last-child'); if(body.style.display === 'none'){ body.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { body.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
+              <span>📋 Indicação</span>
+              <span style="transition: transform 0.3s; font-size: 1.2em;">▼</span>
+            </div>
+            <div style="padding: 0; display: none; border-top: 1px solid #cbd5e1;">
+              <iframe src="{{ asset('foco-01-resumo.html') }}" title="Aba 1 (Indicação do Imóvel)" style="width: 100%; height: 72vh; min-height: 520px; border: none; display: block; background: #ffffff;"></iframe>
+            </div>
+          </div>
+
+          <!-- ABA 2 -->
+          <div style="border: 2px solid #1e3a5f; border-radius: 8px; overflow: hidden; background: #fff;">
+            <div style="background-color: #1e3a5f; color: white; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.1em;" onclick="const body = this.nextElementSibling; const icon = this.querySelector('span:last-child'); if(body.style.display === 'none'){ body.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { body.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
+              <span>📋 Diagnóstico preliminar do imóvel</span>
+              <span style="transition: transform 0.3s; font-size: 1.2em;">▼</span>
+            </div>
+            <div style="padding: 0; display: none; border-top: 1px solid #cbd5e1;">
+              <iframe src="{{ asset('foco-02-resumo.html') }}" title="Aba 2 (Caracterização)" style="width: 100%; height: 72vh; min-height: 520px; border: none; display: block; background: #ffffff;"></iframe>
+            </div>
+          </div>
+
+          <!-- RIP(s) ou Cadastro(s) Mínimo(s) -->
+          <div style="border: 2px solid #1e3a5f; border-radius: 8px; overflow: hidden; background: #fff;">
+            <div style="background-color: #1e3a5f; color: white; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.1em;" onclick="const body = this.nextElementSibling; const icon = this.querySelector('span:last-child'); if(body.style.display === 'none'){ body.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { body.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
+              <span>📋 RIP(s) ou Cadastro(s) Mínimo(s)</span>
+              <span style="transition: transform 0.3s; font-size: 1.2em;">▼</span>
+            </div>
+            <div id="rips-resumo-body" style="padding: 20px; display: none; border-top: 1px solid #cbd5e1; background-color: #f8fafc;">
+              <div id="rips-accordion-container" style="display: flex; flex-direction: column; gap: 15px;">
+                  <div style="text-align: center; padding: 20px; color: #64748b;" id="rips-loading-msg">
+                      🔄 Carregando informações dos imóveis...
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ========================================================= -->
+
+        <!-- ========== ACCORDION DEVOLUÇÃO ========== -->
+        <style>
+          .accordion-container-dev { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+          .accordion-item-dev { border: 1px solid #fda4af; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+          .accordion-header-dev { padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.1em; background: #fff1f2; color: #be123c; border-left: 5px solid #e11d48; transition: filter 0.2s; }
+          .accordion-header-dev:hover { filter: brightness(0.95); }
+          .accordion-body-dev { display: none; padding: 20px; border-top: 1px solid #fda4af; }
+          .accordion-body-dev.active-dev { display: block; background: #fff1f2; }
+          .accordion-icon-dev { font-size: 1.2em; color: #be123c !important; transition: transform 0.3s; }
+          .active-dev .accordion-icon-dev { transform: rotate(180deg); }
+        </style>
+        <div class="accordion-container-dev">
+          <div class="accordion-item-dev">
+            <div class="accordion-header-dev" onclick="this.nextElementSibling.classList.toggle('active-dev'); this.classList.toggle('active-dev');">
+              <span>⚠️ Devolver Processo</span>
+              <span class="accordion-icon-dev">▼</span>

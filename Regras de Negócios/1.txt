@@ -1,0 +1,7 @@
+Sim, nós criamos um perfil administrador para os testes iniciais. Você pode utilizar as seguintes credenciais para fazer o login no sistema:
+
+E-mail: admin@spu.gov.br
+Senha: password
+Este usuário (Luiz Admin) está configurado com o papel de Direção (com amplos privilégios) e lotação na Unidade Central (UC).
+
+Você pode acessar http://localhost:8000 (ou /login, caso não seja redirecionado automaticamente) e testar o acesso com essas credenciais para interagir com o fluxo dos requerimentos!

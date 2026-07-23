@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta charset="UTF-8">
+    <title>Resumo - Dados do Requerimento</title>
+    <link rel="stylesheet" href="css/report.css"><link rel="stylesheet" href="report.css?v=1782355313469">
+</head>
+<body>
+    <div class="report-container">
+        <div id="debug" style="background:#fff3cd;border:1px solid #ffc107;padding:12px;margin-bottom:15px;font-family:monospace;font-size:12px;border-radius:4px;"></div>
+
+        <div id="loading" style="text-align: center; padding: 30px; font-weight: bold; color: #1e3a5f;">
+            Carregando relatório...
+        </div>
+
+        <div id="content" style="display: none;">
+            <div class="report-section">
+                <div class="report-section-title">Informações do Requerente</div>
+                <div class="report-grid">
+                    <div class="report-item">
+                        <span class="report-label">Nome do Requerente</span>
+                        <span class="report-value" id="val_nome">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">CPF/CNPJ</span>
+                        <span class="report-value" id="val_cpf_cnpj">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Telefone</span>
+                        <span class="report-value" id="val_telefone">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Pessoa Estrangeira</span>
+                        <span class="report-value" id="val_estrangeira">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-section-title">Dados do Processo SEI e Requerimento</div>
+                <div class="report-grid">
+                    <div class="report-item">
+                        <span class="report-label">Número do Requerimento</span>
+                        <span class="report-value" id="val_num_req">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Data do Requerimento</span>
+                        <span class="report-value" id="val_data_req">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Número do Processo SEI</span>
+                        <span class="report-value" id="val_sei">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Prioridade Legal</span>
+                        <span class="report-value" id="val_prioridade">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-section-title">Dados do Representante Legal</div>
+                <div class="report-grid">
+                    <div class="report-item">
+                        <span class="report-label">Nome</span>
+                        <span class="report-value" id="val_nome_rep">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">CPF/CNPJ</span>
+                        <span class="report-value" id="val_cpf_rep">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Telefone</span>
+                        <span class="report-value" id="val_tel_rep">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dbg = document.getElementById('debug');
+        function log(msg) {
+            dbg.innerHTML += msg + '<br>';
+        }
+
+        async function loadReport() {
+            // — Captura de processId e credenciais —
+            const pidParent  = window.parent?.CURRENT_PROCESS_ID;
+            const pidParent2 = window.parent?.parent?.CURRENT_PROCESS_ID;
+            const pidLocal   = localStorage.getItem('CURRENT_PROCESS_ID');
+            const processId  = pidParent || pidParent2 || pidLocal;
+
+            const SUPA_URL = window.parent?.SUPABASE_URL || window.parent?.parent?.SUPABASE_URL;
+            const SUPA_KEY = window.parent?.SUPABASE_ANON_KEY || window.parent?.parent?.SUPABASE_ANON_KEY;
+
+            log('🔵 processId (parent): ' + pidParent);
+            log('🔵 processId (parent2): ' + pidParent2);
+            log('🔵 processId (localStorage): ' + pidLocal);
+            log('✅ processId USADO: <strong>' + processId + '</strong>');
+            log('🔑 SUPA_URL: ' + (SUPA_URL ? SUPA_URL.substring(0,30)+'...' : 'NÃO ENCONTRADO'));
+            log('🔑 SUPA_KEY: ' + (SUPA_KEY ? SUPA_KEY.substring(0,20)+'...' : 'NÃO ENCONTRADO'));
+
+            if (!processId) {
+                document.getElementById('loading').innerText = "Erro: Processo não identificado.";
+                return;
+            }
+            if (!SUPA_URL || !SUPA_KEY) {
+                document.getElementById('loading').innerText = "Erro: Credenciais do Supabase não encontradas.";
+                return;
+            }
+
+            try {
+                // 1. tabela_relatorios
+                const url = `${SUPA_URL}/rest/v1/tabela_relatorios?select=*&process_id=eq.${encodeURIComponent(processId)}&aba=eq.aba1&limit=1`;
+                log('📡 Consultando: tabela_relatorios para ' + processId);
+                const res = await fetch(url, { headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` } });
+                log('📡 Status relatorios: ' + res.status);
+                const data = await res.json();
+                log('📦 Registros relatorios: ' + data.length);
+
+                let rel = null;
+                let dateObj = new Date();
+
+                if (data && data.length > 0) {
+                    rel = data[0].dados_relatorio;
+                    dateObj = new Date(data[0].updated_at);
+                    log('✅ Relatório encontrado. nome_requerente: ' + rel?.nome_requerente);
+                }
+
+                // 2. Fallback tabela_requerimentos
+                log('📡 Consultando: tabela_requerimentos para ' + processId);
+                let fallback = {};
+                const reqUrl = `${SUPA_URL}/rest/v1/tabela_requerimentos?select=*&numero_requerimento=eq.${encodeURIComponent(processId)}&limit=1`;
+                const reqRes = await fetch(reqUrl, { headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` } });
+                log('📡 Status requerimentos: ' + reqRes.status);
+                const reqList = await reqRes.json();
+                log('📦 Registros requerimentos: ' + reqList.length);
+
+                if (reqList && reqList.length > 0) {
+                    const dj = typeof reqList[0].dados_json === 'string' ? JSON.parse(reqList[0].dados_json) : (reqList[0].dados_json || {});
+                    log('📦 dados_json tipo: ' + typeof reqList[0].dados_json);
+                    log('📦 dados_json keys: ' + Object.keys(dj).join(', '));
+                    fallback = {
+                        nome_requerente: dj.interessado || dj.nome_requerente || '-',
+                        cpf_cnpj: dj.cpf_cnpj || '-',
+                        telefone: dj.telefone || '-',
+                        pessoa_estrangeira: dj.pessoa_estrangeira || '-',
+                        numero_requerimento: reqList[0].numero_requerimento || processId,
+                        data_requerimento: dj.data_req || '-',
+                        processo_sei: dj.processo_sei || '-',
+                        prioridade_legal: dj.prioridade_legal || '-',
+                        nome_rep: dj.nome_rep || '-',
+                        cpf_cnpj_rep: dj.cpf_cnpj_rep || '-',
+                        telefone_rep: dj.telefone_rep || '-'
+                    };
+                    if (!rel) dateObj = new Date(reqList[0].updated_at || Date.now());
+                }
+
+                const finalNome    = (rel?.nome_requerente) || fallback.nome_requerente || '-';
+                const finalCpf     = (rel?.cpf_cnpj) || fallback.cpf_cnpj || '-';
+                const finalTel     = (rel?.telefone) || fallback.telefone || '-';
+                const finalEstrang = (rel?.pessoa_estrangeira) || fallback.pessoa_estrangeira || '-';
+                const finalNumReq  = (rel?.numero_requerimento) || fallback.numero_requerimento || '-';
+                const finalDataReq = (rel?.data_requerimento) || fallback.data_requerimento || '-';
+                const finalSei     = (rel?.processo_sei) || fallback.processo_sei || '-';
+                const finalPri     = (rel?.prioridade_legal) || fallback.prioridade_legal || '-';
+                const finalNomRep  = (rel?.nome_rep) || fallback.nome_rep || '-';
+                const finalCpfRep  = (rel?.cpf_cnpj_rep) || fallback.cpf_cnpj_rep || '-';
+                const finalTelRep  = (rel?.telefone_rep) || fallback.telefone_rep || '-';
+
+                log('🎯 FINAL nome: ' + finalNome + ' | sei: ' + finalSei);
+
+                document.getElementById('val_nome').textContent     = finalNome;
+                document.getElementById('val_cpf_cnpj').textContent = finalCpf;
+                document.getElementById('val_telefone').textContent  = finalTel;
+                document.getElementById('val_estrangeira').textContent = finalEstrang;
+                document.getElementById('val_num_req').textContent   = finalNumReq;
+                document.getElementById('val_data_req').textContent  = finalDataReq;
+                document.getElementById('val_sei').textContent       = finalSei;
+                document.getElementById('val_prioridade').textContent = finalPri;
+                document.getElementById('val_nome_rep').textContent  = finalNomRep;
+                document.getElementById('val_cpf_rep').textContent   = finalCpfRep;
+                document.getElementById('val_tel_rep').textContent   = finalTelRep;
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display  = 'block';
+            } catch (err) {
+                log('❌ ERRO: ' + err.message);
+                document.getElementById('loading').innerText = "Erro ao carregar o relatório: " + err.message;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadReport);
+    </script>
+</body>
+</html>

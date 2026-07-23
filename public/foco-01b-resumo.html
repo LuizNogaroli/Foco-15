@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <title>Resumo - Indicação do Imóvel</title>
+    <link rel="stylesheet" href="css/report.css"><link rel="stylesheet" href="report.css?v=1782355313469">
+    <script src="js/fetch_spu.js"></script>
+</head>
+<body>
+    <div class="report-container">
+        <div class="report-header">
+            <p style="font-weight:bold; margin-top:10px;">Relatório Consolidado - Aba 1b (Indicação do Imóvel)</p>
+        </div>
+
+        <div id="loading" style="text-align: center; padding: 30px; font-weight: bold; color: #1e3a5f;">
+            Carregando relatório...
+        </div>
+
+        <div id="content" style="display: none;">
+            <div class="report-section">
+                <div class="report-section-title">Indicação do Imóvel</div>
+                <div class="report-grid">
+                    <div class="report-item" style="grid-column: span 2;">
+                        <span class="report-label">Imóvel/Área Relacionados (Conceituação)</span>
+                        <span class="report-value" id="val_conceituacao">-</span>
+                    </div>
+                    
+                    <div class="report-item" style="grid-column: span 2; margin-top: 15px;">
+                        <span class="report-label">RIP(s) ou Cadastro(s) Mínimo(s) Associado(s)</span>
+                        <div id="rips-accordion-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; width: 100%;">
+                            <!-- Dinamicamente preenchido -->
+                        </div>
+                    </div>
+
+                    <div class="report-item" style="grid-column: span 2; margin-top: 15px;">
+                        <span class="report-label">Solicitação de Criação de RIP / Observações</span>
+                        <span class="report-value" id="val_obs">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 15px; border: 1px solid #ddd; border-left: 6px solid #1a7a4a; background: #fdfdfd; width: 100%; box-sizing: border-box; font-size: 0.85rem; color: #444; font-family: sans-serif;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="line-height: 1.5;">
+                        Responsável: <span style="color:#1a4e8a; font-weight:bold;">Sistema (Geração Automática)</span><br>
+                        Status do Documento: <span style="color:#1a7a4a; font-weight:bold;">CONSOLIDADO E CONFERIDO</span>
+                    </div>
+                    <div style="text-align: right; line-height: 1.5;">
+                        <strong>Data/Hora Relatório:</strong> <span id="val_data_relatorio">-</span><br>
+                        <strong>Processo Base:</strong> <span style="font-family: monospace; color: #666;" id="val_base_id">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-footer">
+            <p>Documento gerado automaticamente com base nos dados salvos no sistema. Simples referência geográfica e patrimonial.</p>
+        </div>
+    </div>
+
+    <script>
+        // Helper para renderizar campo readonly
+        function buildFieldRO(label, value) {
+            return `
+                <div style="display: flex; align-items: baseline; margin-bottom: 6px; padding: 5px 0; font-size: 0.9rem;">
+                    <span style="display: flex; width: 240px;">
+                        <span style="font-weight: 600; color: #334155; white-space: nowrap;">${label}</span>
+                        <span style="flex: 1; border-bottom: 1px dotted #94a3b8; min-width: 10px;"></span>
+                        <span style="white-space: nowrap; color: #334155;">:</span>
+                    </span>
+                    <span style="flex: 1; margin-left: 6px; padding: 3px 10px; background: #f1f5f9; color: #0f172a; border-radius: 3px;">${value || '-'}</span>
+                </div>
+            `;
+        }
+
+        async function loadReport() {
+            const processId = window.parent?.CURRENT_PROCESS_ID || window.parent?.parent?.CURRENT_PROCESS_ID || localStorage.getItem('CURRENT_PROCESS_ID');
+            if (!processId) {
+                document.getElementById('loading').innerText = "Erro: Processo não identificado.";
+                return;
+            }
+
+            try {
+                const SUPA_URL = window.parent?.SUPABASE_URL || window.parent?.parent?.SUPABASE_URL;
+                const SUPA_KEY = window.parent?.SUPABASE_ANON_KEY || window.parent?.parent?.SUPABASE_ANON_KEY;
+
+                if (!SUPA_URL || !SUPA_KEY) {
+                    throw new Error("Credenciais do Supabase não encontradas.");
+                }
+
+                // 1. Tentar buscar da tabela_relatorios
+                let rel = null;
+                let dateObj = new Date();
+                try {
+                    const url = `${SUPA_URL}/rest/v1/tabela_relatorios?select=*&process_id=eq.${encodeURIComponent(processId)}&aba=eq.aba1&limit=1`;
+                    const res = await fetch(url, {
+                        headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.length > 0) {
+                            rel = data[0].dados_relatorio;
+                            dateObj = new Date(data[0].updated_at);
+                        }
+                    }
+                } catch(e) {
+                    console.warn("Erro ao buscar tabela_relatorios:", e);
+                }
+
+                // 2. Buscar em tempo real de tabela_indicacao
+                let rips = [];
+                let cadastros = [];
+                let conceituacao = '';
+                let obs = '';
+
+                try {
+                    const urlInd = `${SUPA_URL}/rest/v1/tabela_indicacao?select=*&numero_requerimento=eq.${encodeURIComponent(processId)}&limit=1`;
+                    const resInd = await fetch(urlInd, {
+                        headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
+                    });
+                    if (resInd.ok) {
+                        const rows = await resInd.json();
+                        if (rows && rows[0] && rows[0].dados_json) {
+                            const dj = typeof rows[0].dados_json === 'string' ? JSON.parse(rows[0].dados_json) : rows[0].dados_json;
+                            if (dj) {
+                                rips = dj.rips || [];
+                                cadastros = dj.cadastros_minimos || [];
+                                conceituacao = dj.conceituacao_imovel || '';
+                                obs = dj.solicitacao_criacao_rip || '';
+                                dateObj = new Date(rows[0].updated_at || dateObj);
+                            }
+                        }
+                    }
+                } catch(e) {
+                    console.warn("Erro ao buscar tabela_indicacao:", e);
+                }
+
+                // 3. Fallback para tabela_requerimentos
+                if (rips.length === 0 && cadastros.length === 0 && !conceituacao) {
+                    try {
+                        const reqUrl = `${SUPA_URL}/rest/v1/tabela_requerimentos?select=*&numero_requerimento=eq.${encodeURIComponent(processId)}&limit=1`;
+                        const reqRes = await fetch(reqUrl, { headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` } });
+                        if (reqRes.ok) {
+                            const reqList = await reqRes.json();
+                            if (reqList && reqList.length > 0) {
+                                const dj = typeof reqList[0].dados_json === 'string' ? JSON.parse(reqList[0].dados_json) : reqList[0].dados_json;
+                                if (dj) {
+                                    rips = dj.rips || [];
+                                    cadastros = dj.cadastros_minimos || [];
+                                    conceituacao = dj.conceituacao_imovel || '';
+                                    obs = dj.solicitacao_criacao_rip || '';
+                                    dateObj = new Date(reqList[0].updated_at || Date.now());
+                                }
+                            }
+                        }
+                    } catch(fErr) {
+                        console.warn('Fallback tabela_requerimentos falhou:', fErr);
+                    }
+                }
+
+                // Mesclar dados
+                const finalConceituacao = conceituacao || (rel && rel.conceituacao_imovel) || 'Imóvel/Área referente ao requerimento ' + processId;
+                const finalRips = (rips && rips.length > 0) ? rips : ((rel && rel.rips) || []);
+                const finalCadastros = (cadastros && cadastros.length > 0) ? cadastros : ((rel && rel.cadastros_minimos) || []);
+                const finalObs = obs || (rel && rel.solicitacao_criacao_rip) || '-';
+
+                document.getElementById('val_conceituacao').textContent = finalConceituacao;
+                document.getElementById('val_obs').textContent = finalObs;
+                
+                const container = document.getElementById('rips-accordion-container');
+                container.innerHTML = ''; // Limpa anterior
+
+                if (finalRips.length === 0 && finalCadastros.length === 0) {
+                    container.innerHTML = `<div style="color: #666; font-style: italic; padding: 5px 0;">Nenhum RIP ou Cadastro Mínimo associado.</div>`;
+                } else {
+                    // Renderiza cada RIP
+                    for (const rip of finalRips) {
+                        let dadosSPU = {};
+                        try {
+                            if (typeof window.fetchSPU === 'function') {
+                                dadosSPU = await window.fetchSPU(rip);
+                            }
+                        } catch (e) {
+                            console.warn("Erro ao buscar dados do RIP no SPU:", e);
+                        }
+                        
+                        const block = document.createElement('div');
+                        block.style.cssText = "background: white; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 8px;";
+                        block.innerHTML = `
+                            <div style="background: #e2e8f0; color: #1e293b; padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 0.95em;" onclick="const b = this.nextElementSibling; const icon = this.querySelector('span:last-child'); if(b.style.display === 'none'){ b.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { b.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
+                                <span>🏠 Imóvel (RIP): ${rip}</span>
+                                <span style="transition: transform 0.2s;">▼</span>
+                            </div>
+                            <div style="padding: 16px; display: none; background: #fff;">
+                                <div style="display: flex; flex-direction: column;">
+                                    ${buildFieldRO('Conceituação do Imóvel', dadosSPU.conceituacao)}
+                                    ${buildFieldRO('Condição de Urbanização', dadosSPU.condicao_urbanizacao)}
+                                    ${buildFieldRO('Natureza do Terreno', dadosSPU.natureza || dadosSPU.natureza_terreno)}
+                                    ${buildFieldRO('Tipo de Imóvel', dadosSPU.tipo_imovel)}
+                                    ${buildFieldRO('CEP', dadosSPU.cep)}
+                                    ${buildFieldRO('Logradouro', dadosSPU.logradouro || dadosSPU.endereco)}
+                                    ${buildFieldRO('Bairro', dadosSPU.bairro)}
+                                    ${buildFieldRO('Município / UF', `${dadosSPU.municipio || ''} / ${dadosSPU.uf || ''}`)}
+                                    ${buildFieldRO('Área Total (m²)', dadosSPU.area_total)}
+                                    ${buildFieldRO('Área da União (m²)', dadosSPU.area_uniao || dadosSPU.area_terreno_uniao)}
+                                    ${buildFieldRO('Área Construída Total (m²)', dadosSPU.area_construida_total)}
+                                    ${buildFieldRO('Área Construída Disponível (m²)', dadosSPU.area_construida_disponivel)}
+                                    ${buildFieldRO('Área de Terreno Disponível (m²)', dadosSPU.area_terreno_disponivel)}
+                                    ${buildFieldRO('Benfeitorias', dadosSPU.benfeitorias)}
+                                    ${buildFieldRO('Situação da Incorporação', dadosSPU.situacao_incorporacao || dadosSPU.situacao)}
+                                    ${buildFieldRO('Processo de Incorporação', dadosSPU.processo_incorporacao)}
+                                    ${buildFieldRO('LPM/1831 ou LMEO Homologadas?', dadosSPU.lpm_homologada)}
+                                    ${buildFieldRO('Valor da Avaliação (R$)', dadosSPU.valor_avaliado || dadosSPU.valor_avaliacao)}
+                                    ${buildFieldRO('Data da Avaliação', dadosSPU.data_avaliacao)}
+                                    ${buildFieldRO('Instrumento de Avaliação', dadosSPU.instrumento_avaliacao)}
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(block);
+                    }
+                    
+                    // Renderiza cada Cadastro Mínimo
+                    finalCadastros.forEach((cad, idx) => {
+                        const block = document.createElement('div');
+                        block.style.cssText = "background: white; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 8px;";
+                        block.innerHTML = `
+                            <div style="background: #e2e8f0; color: #1e293b; padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 0.95em;" onclick="const b = this.nextElementSibling; const icon = this.querySelector('span:last-child'); if(b.style.display === 'none'){ b.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { b.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
+                                <span>📝 Cadastro Mínimo #${idx + 1} (Sem RIP)</span>
+                                <span style="transition: transform 0.2s;">▼</span>
+                            </div>
+                            <div style="padding: 16px; display: none; background: #fff;">
+                                <div style="display: flex; flex-direction: column;">
+                                    ${buildFieldRO('CEP', cad.cep)}
+                                    ${buildFieldRO('Área (m²)', cad.area)}
+                                    ${buildFieldRO('Logradouro', cad.logradouro || cad.endereco)}
+                                    ${buildFieldRO('Bairro', cad.bairro)}
+                                    ${buildFieldRO('Município / UF', `${cad.municipio || ''} / ${cad.uf || ''}`)}
+                                    ${buildFieldRO('Observações', cad.observacoes)}
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(block);
+                    });
+                }
+                
+                document.getElementById('val_data_relatorio').textContent = dateObj.toLocaleString('pt-BR');
+                document.getElementById('val_base_id').textContent = processId;
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loading').innerText = "Erro ao carregar o relatório: " + err.message;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadReport);
+    </script>
+</body>
+</html>

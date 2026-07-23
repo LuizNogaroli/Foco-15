@@ -1,0 +1,23 @@
+4) Na aba 3 (Análise Preliminar do Imóvel e Proposta de Destinação)
+Perfil que edita a aba 3: Equipe Destinação (SPU/UF)
+Outros perfis: visualizam
+Status: Análise Preliminar do Imóvel
+Gatilho1: Quando clica em Salvar e Enviar, o processo "deve ir" para a aba 7 - Manifestações, para obter as validações, conferências ou devoluções do processo.
+Nesse momento de salvar e enviar deve trocar o status para "Validação Chefia (SPU/UF)"
+Gatilho2: 
+5) Momento: validação da Chefia (SPU/UF)
+Status atual : "Validação Chefia (SPU/UF)"
+Gatilho1 (avançar processo na hierarquia):
+quando o perfil Chefia (SPU/UF) valida o processo, segue para a manifestação da Coordenação (SPU/UF)
+Deve mudar o status para "Validação Coordenação (SPU/UF)
+Gatilho2 (devolver processo)
+
+6) Momento: manifestação da Coordenação (SPU/UF)
+Status atual : "Validação Coordenação (SPU/UF)"
+Gatilho: quando o perfil Coordenação (SPU/UF) valida o processo, segue para a manifestação da Superintendência (SPU/UF)
+Deve mudar o status para "Deliberação Superintendência (SPU/UF)
+
+7) Momento: deliberação da Superintendência (SPU/UF)
+Status atual : "Deliberação Superintendência (SPU/UF)"
+Gatilho: quando o perfil Superintendência (SPU/UF) delibera no processo, segue para a manifestação da Equipe C.G. (SPU/UC)
+Deve mudar o status para "Validação Equipe C.G. (SPU/UC)

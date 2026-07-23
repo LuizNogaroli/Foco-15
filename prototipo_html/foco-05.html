@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5: Análise do Destinatário - Maquete SPU</title>
+    
+    <!-- Estilos Globais -->
+    <link rel="stylesheet" href="styles-forms.css?v=1782355313469">
+    <link rel="stylesheet" href="hints.css?v=1782355313469">
+</head>
+<body>
+    <div class="form-container">
+        
+        <form id="form05" novalidate>
+
+            <!-- ── Regularidade Cadastral (Consolidado CPF/CNPJ) ──────────────── -->
+            <div class="form-group editavel">
+                <label>CPF/CNPJ regular?</label>
+                <div class="radio-group" id="group-cpf-cnpj-regular">
+                    <label class="radio-option"><input type="radio" name="cpf_cnpj_regular" value="Sim" required> Sim</label>
+                    <label class="radio-option"><input type="radio" name="cpf_cnpj_regular" value="Não"> Não</label>
+                    <label class="radio-option"><input type="radio" name="cpf_cnpj_regular" value="Não se aplica"> Não se aplica</label>
+                </div>
+            </div>
+
+            <!-- ── Natureza Jurídica do Destinatário ──────────────── -->
+            <div class="form-group editavel">
+                <label for="campo16">Natureza Jurídica do Destinatário:</label>
+                <select id="campo16" name="campo16">
+                    <option value="">Selecione a Natureza Jurídica...</option>
+                
+                    <optgroup label="1. Administração Pública">
+                        <option value="101-5">101-5 - Órgão Público do Poder Executivo Federal</option>
+                        <option value="102-3">102-3 - Órgão Público do Poder Executivo Estadual ou do Distrito Federal</option>
+                        <option value="103-1">103-1 - Órgão Público do Poder Executivo Municipal</option>
+                        <option value="104-0">104-0 - Órgão Público do Poder Legislativo Federal</option>
+                        <option value="105-8">105-8 - Órgão Público do Poder Legislativo Estadual ou do Distrito Federal</option>
+                        <option value="106-6">106-6 - Órgão Público do Poder Legislativo Municipal</option>
+                        <option value="107-4">107-4 - Órgão Público do Poder Judiciário Federal</option>
+                        <option value="108-2">108-2 - Órgão Público do Poder Judiciário Estadual</option>
+                        <option value="110-4">110-4 - Autarquia Federal</option>
+                        <option value="111-2">111-2 - Autarquia Estadual ou do Distrito Federal</option>
+                        <option value="112-0">112-0 - Autarquia Municipal</option>
+                        <option value="113-9">113-9 - Fundação Pública de Direito Público Federal</option>
+                        <option value="114-7">114-7 - Fundação Pública de Direito Público Estadual ou do Distrito Federal</option>
+                        <option value="115-5">115-5 - Fundação Pública de Direito Público Municipal</option>
+                        <option value="116-3">116-3 - Órgão Público Autônomo Federal</option>
+                        <option value="117-1">117-1 - Órgão Público Autônomo Estadual ou do Distrito Federal</option>
+                        <option value="118-0">118-0 - Órgão Público Autônomo Municipal</option>
+                        <option value="119-8">119-8 - Commission Polinacional</option>
+                        <option value="121-0">121-0 - Consórcio Público de Direito Público (Associação Pública)</option>
+                        <option value="122-8">122-8 - Consórcio Público de Direito Privado</option>
+                        <option value="123-6">123-6 - Estado ou Distrito Federal</option>
+                        <option value="124-4">124-4 - Município</option>
+                        <option value="125-2">125-2 - Fundação Pública de Direito Privado Federal</option>
+                        <option value="126-0">126-0 - Fundação Pública de Direito Privado Estadual ou do Distrito Federal</option>
+                        <option value="127-9">127-9 - Fundação Pública de Direito Privado Municipal</option>
+                        <option value="128-7">128-7 - Fundo Público da Administração Indireta Federal</option>
+                        <option value="129-5">129-5 - Fundo Público da Administração Indireta Estadual ou do Distrito Federal</option>
+                        <option value="130-9">130-9 - Fundo Público da Administração Indireta Municipal</option>
+                        <option value="131-7">131-7 - Fundo Público da Administração Direta Federal</option>
+                        <option value="132-5">132-5 - Fundo Público da Administração Direta Estadual ou do Distrito Federal</option>
+                        <option value="133-3">133-3 - Fundo Público da Administração Direta Municipal</option>
+                        <option value="134-1">134-1 - União</option>
+                    </optgroup>
+
+                    <optgroup label="2. Entidades Empresariais">
+                        <option value="201-1">201-1 - Empresa Pública</option>
+                        <option value="203-8">203-8 - Sociedade de Economia Mista</option>
+                        <option value="204-6">204-6 - Sociedade Anônima Aberta</option>
+                        <option value="205-4">205-4 - Sociedade Anônima Fechada</option>
+                        <option value="206-2" selected>206-2 - Sociedade Empresária Limitada</option>
+                        <option value="207-0">207-0 - Sociedade Empresária em Nome Coletivo</option>
+                        <option value="208-9">208-9 - Sociedade Empresária em Comandita Simples</option>
+                        <option value="209-7">209-7 - Sociedade Empresária em Comandita por Ações</option>
+                        <option value="212-7">212-7 - Sociedade em Conta de Participação</option>
+                        <option value="213-5">213-5 - Empresário (Individual)</option>
+                        <option value="214-3">214-3 - Cooperativa</option>
+                        <option value="215-1">215-1 - Consórcio de Sociedades</option>
+                        <option value="216-0">216-0 - Grupo de Sociedades</option>
+                        <option value="217-8">217-8 - Estabelecimento, no Brasil, de Sociedade Estrangeira</option>
+                        <option value="219-4">219-4 - Estabelecimento, no Brasil, de Empresa Binacional Argentino-Brasileira</option>
+                        <option value="221-6">221-6 - Empresa Domiciliada no Exterior</option>
+                        <option value="222-4">222-4 - Clube/Fundo de Investimento</option>
+                        <option value="223-2">223-2 - Sociedade Simples Pura</option>
+                        <option value="224-0">224-0 - Sociedade Simples Limitada</option>
+                        <option value="225-9">225-9 - Sociedade Simples em Nome Coletivo</option>
+                        <option value="226-7">226-7 - Sociedade Simples em Comandita Simples</option>
+                        <option value="227-5">227-5 - Empresa Binacional</option>
+                        <option value="228-3">228-3 - Consórcio de Empregadores</option>
+                        <option value="229-1">229-1 - Consórcio Simples</option>
+                        <option value="230-5">230-5 - Empresa Individual de Responsabilidade Limitada (de Natureza Empresária)</option>
+                        <option value="231-3">231-3 - Empresa Individual de Responsabilidade Limitada (de Natureza Simples)</option>
+                        <option value="232-1">232-1 – Sociedade Unipessoal de Advogados</option>
+                        <option value="233-0">233-0 – Cooperativas de Consumo</option>
+                        <option value="234-8">234-8 – Empresa Simples de Inovação - Inova Simples</option>
+                        <option value="235-6">235-6 – Investidor Não Residente</option>
+                    </optgroup>
+
+                    <optgroup label="3. Entidades sem Fins Lucrativos">
+                        <option value="303-4">303-4 - Serviço Notarial e Registral (Cartório)</option>
+                        <option value="306-9">306-9 - Fundação Privada</option>
+                        <option value="307-7">307-7 - Serviço Social Autônomo</option>
+                        <option value="308-5">308-5 - Condomínio Edilício</option>
+                        <option value="310-7">310-7 - Comissão de Conciliação Prévia</option>
+                        <option value="311-5">311-5 - Entidade de Mediação e Arbitragem</option>
+                        <option value="313-1">313-1 - Entidade Sindical</option>
+                        <option value="320-4">320-4 - Estabelecimento, no Brasil, de Fundação ou Associação Estrangeiras</option>
+                        <option value="321-2">321-2 - Fundação ou Associação Domiciliada no Exterior</option>
+                        <option value="322-0">322-0 - Organização Religiosa</option>
+                        <option value="323-9">323-9 - Comunidade Indígena</option>
+                        <option value="324-7">324-7 - Fundo Privado</option>
+                        <option value="325-5">325-5 - Órgão de Direção Nacional de Partido Político</option>
+                        <option value="326-3">326-3 - Órgão de Direção Regional de Partido Político</option>
+                        <option value="327-1">327-1 - Órgão de Direção Local de Partido Político</option>
+                        <option value="328-0">328-0 - Comitê Financeiro de Partido Político</option>
+                        <option value="329-8">329-8 - Frente Plebiscitária ou Referendária</option>
+                        <option value="330-1">330-1 - Organização Social (OS)</option>
+                        <option value="331-0">331-0 - Demais Condomínios</option>
+                        <option value="332-8">332-8 - Plano de Benefícios de Previdência Complementar Fechada</option>
+                        <option value="399-9">399-9 - Associação Privada</option>
+                    </optgroup>
+
+                    <optgroup label="4. Pessoas Físicas">
+                        <option value="401-4">401-4 - Empresa Individual Imobiliária</option>
+                        <option value="402-2">402-2 - Segurado Especial</option>
+                        <option value="408-1">408-1 - Contribuinte individual</option>
+                        <option value="409-0">409-0 - Candidato a Cargo Político Eletivo</option>
+                        <option value="411-1">411-1 - Leiloeiro</option>
+                        <option value="412-0">412-0 - Produtor Rural (Pessoa Física)</option>
+                    </optgroup>
+
+                    <optgroup label="5. Organizações Internacionais">
+                        <option value="501-0">501-0 - Organização Internacional</option>
+                        <option value="502-9">502-9 - Representação Diplomática Estrangeira</option>
+                        <option value="503-7">503-7 - Outras Instituições Extraterritoriais</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- ── Possui destinações ativas? ─────────────────────────────────────── -->
+            <div class="form-group editavel">
+                <label>
+                    Possui destinações ativas?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon hint-link"
+                            data-hint-tipo="verde"
+                            data-popup="hints/destinacao_ativa.html"
+                            data-hint="Clique para abrir informações detalhadas sobre destinação ativa."
+                            role="button"
+                            tabindex="0"
+                            aria-label="Ajuda: Destinação ativa"
+                        >?</span>
+                    </span>
+                </label>
+
+                <div class="radio-group" id="group-campo31">
+                    <label class="radio-option">
+                        <input type="radio" name="campo31" value="Sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo31" value="Não" checked> Não
+                    </label>
+                </div>
+
+                <!-- Contratos relacionados à destinação ativa -->
+                <div id="bloco31" style="display: none; flex-direction: column; gap: 6px; margin-top: 15px;">
+                    <label for="campo31_contratos">Contratos/Instrumentos relacionados à destinação ativa:</label>
+                    <textarea
+                        id="campo31_contratos"
+                        name="campo31_contratos"
+                        placeholder="Ex: Contrato de Cessão de Uso nº 001/2020, vigência até 12/2025..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- ── Pendências identificadas ────────────────────────────── -->
+            <div class="form-group editavel">
+                <label>Pendências contratuais identificadas (Ativas ou não):</label>
+
+                <div class="checkbox-group" id="group-campo42" style="display: flex; flex-direction: column; gap: 10px;">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Nenhuma identificada" id="campo42-nenhuma" checked>
+                        Nenhuma identificada
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Inadimplência financeira">
+                        Inadimplência financeira
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Pendências contratuais">
+                        Pendências contratuais
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Irregularidade cadastral">
+                        Irregularidade cadastral
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Uso em desacordo com o autorizado">
+                        Uso em desacordo com o autorizado
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Outras" id="campo42-outras">
+                        Outras
+                    </label>
+                </div>
+
+                <div id="bloco-pendencias-obs" style="display: none; margin-top: 15px;">
+                    <label for="campo32_obs">Observações sobre pendências:</label>
+                    <textarea
+                        id="campo32_obs"
+                        name="campo32_obs"
+                        placeholder="Descreva as pendências identificadas..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- ── Certidão atualizada da matrícula ────────────────────── -->
+            <div class="form-group editavel">
+                <label for="val_anexo_matricula">Certidão atualizada da matrícula (não superior a 12 meses):</label>
+                <input type="hidden" name="anexo_matricula" id="val_anexo_matricula">
+                <input type="hidden" name="filename_anexo_matricula" id="val_filename_anexo_matricula">
+                <input type="file" id="file_anexo_matricula" style="display:none;" onchange="handleFileUpload('anexo_matricula')" accept=".pdf,.doc,.docx,.jpg,.png">
+                <div id="actions_anexo_matricula" style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+                    <span id="filename_anexo_matricula" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                    <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('anexo_matricula')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+                    <button type="button" class="btn-link-doc btn-view" style="display:none; background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="visualizarDoc('anexo_matricula')" title="Visualizar">👁️ Visualizar</button>
+                    <button type="button" class="btn-link-doc btn-remove" style="display:none; background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="removerDoc('anexo_matricula')" title="Remover">🗑️ Excluir</button>
+                </div>
+            </div>
+
+            <!-- ── Capacidade orçamentária/financeira demonstrada ───────────── -->
+            <div class="form-group editavel">
+                <label for="campo33">Capacidade orçamentária/financeira demonstrada:</label>
+
+                <select id="campo33" name="campo33" required>
+                    <option value="">Selecione...</option>
+                    <option value="demonstrada formalmente (documentação analisada)">Demonstrada formalmente (documentação analisada)</option>
+                    <option value="não demonstrada (documentação insuficiente)">Não demonstrada (documentação insuficiente)</option>
+                    <option value="não se aplica">Não se aplica</option>
+                </select>
+
+                <div id="bloco33_obs" style="display: none; margin-top: 15px;">
+                    <label for="campo33_obs">Observações sobre a capacidade orçamentária/financeira:</label>
+                    <textarea
+                        id="campo33_obs"
+                        name="campo33_obs"
+                        placeholder="Observações complementares..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- ── Fundamentação legal da destinação ───────────────────────── -->
+            <div class="form-group editavel">
+                <label for="fundamentacao_legal">Fundamentação legal da destinação, se aplicada:</label>
+                <textarea id="fundamentacao_legal" name="fundamentacao_legal" placeholder="Informe a fundamentação legal..."></textarea>
+            </div>
+
+            <!-- ── Riscos Verificados (Duplicado) ─────────────────────────── -->
+            <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+                Riscos Verificados
+            </h4>
+            <div class="form-group editavel">
+                <label>Riscos identificados para a destinação:</label>
+                <div class="checkbox-group" id="group-destinacao-riscos">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_riscos[]" value="Nenhum risco identificado" checked> Nenhum risco identificado
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_riscos[]" value="Risco de invasão/esbulho"> Risco de invasão/esbulho
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_riscos[]" value="Risco à segurança/saúde pública"> Risco à segurança/saúde pública
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_riscos[]" value="Risco estrutural ou de desabamento"> Risco estrutural ou de desabamento
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_riscos[]" value="Risco de depredação, vandalismo ou deterioração"> Risco de depredação, vandalismo ou deterioração
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_riscos[]" value="Outro risco identificado"> Outro risco identificado
+                    </label>
+                </div>
+                <div id="bloco-obs-destinacao-riscos" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                    <label for="destinacao_obs_riscos">Observações sobre riscos:</label>
+                    <textarea id="destinacao_obs_riscos" name="destinacao_obs_riscos" placeholder="Descreva as informações sobre os riscos verificados..."></textarea>
+                </div>
+            </div>
+
+            <!-- ── Restrições de Destinação (Movidas do Setor de Caracterização) ── -->
+            <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+                Restrições e Condicionantes de Destinação
+            </h4>
+            <div class="form-group editavel">
+                <label>Restrições verificadas:</label>
+                <div class="checkbox-group" id="group-destinacao-restricoes">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_restricoes[]" value="Nenhuma restrição identificada" checked> Nenhuma restrição identificada
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_restricoes[]" value="Área de regularização fundiária"> Área de regularização fundiária
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_restricoes[]" value="Possui PDISP"> Possui PDISP
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_restricoes[]" value="Conflitos fundiários/sociais"> Conflitos fundiários/sociais
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_restricoes[]" value="Termo de Gestão de Praias/PGI"> Termo de Gestão de Praias/PGI
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="destinacao_restricoes[]" value="Outra restrição"> Outra restrição
+                    </label>
+                </div>
+                <div id="bloco-obs-destinacao-restricoes" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                    <label for="destinacao_obs_restricoes">Observações sobre restrições:</label>
+                    <textarea id="destinacao_obs_restricoes" name="destinacao_obs_restricoes" placeholder="Descreva as informações complementares sobre as restrições..."></textarea>
+                </div>
+            </div>
+
+            <!-- ── Ações judiciais ou de órgãos de controle (Movido) ────────── -->
+            <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+                Ações judiciais ou de órgãos de controle
+            </h4>
+            <div class="form-group inline">
+                <label for="acao-nup-sei">NUP SEI:</label>
+                <input type="text" id="acao-nup-sei" name="destinacao_nup_sei" value="19739.000123/2026-45" readonly>
+            </div>
+            <div class="form-group inline">
+                <label for="acao-tipo-processo">Tipo de Processo:</label>
+                <input type="text" id="acao-tipo-processo" name="destinacao_tipo_processo" value="Processo administrativo" readonly>
+            </div>
+            <div class="form-group inline">
+                <label for="acao-resumo">Resumo:</label>
+                <input type="text" id="acao-resumo" name="destinacao_resumo" value="Apuração administrativa sobre a situação dominial e ocupacional do imóvel." readonly>
+            </div>
+            <div class="form-group editavel">
+                <label for="acao-descricao">Descrição:</label>
+                <textarea id="acao-descricao" name="destinacao_acao_descricao" placeholder="Descreva as principais informações relacionadas à ação, processo ou demanda de controle.">Processo fictício instaurado para análise da regularidade da ocupação, verificação de eventuais restrições administrativas e avaliação da necessidade de manifestação técnica da SPU quanto à destinação do imóvel.</textarea>
+            </div>
+
+            <!-- ── Custos de Manutenção para a SPU ── -->
+            <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+                Custos de Manutenção para a SPU
+            </h4>
+            <div class="form-group editavel">
+                <label>Imóvel gera custos de manutenção para a SPU?</label>
+                <div class="radio-group" id="group-custos-manutencao">
+                    <label class="radio-option"><input type="radio" name="custos_manutencao" value="Sim"> Sim</label>
+                    <label class="radio-option"><input type="radio" name="custos_manutencao" value="Não" checked> Não</label>
+                </div>
+                <div id="bloco-custos-valor" style="display: none; flex-direction: column; gap: 6px; margin-top: 15px;">
+                    <label for="custos_valor">Valor anual estimado dos custos (R$):</label>
+                    <input type="text" id="custos_valor" name="custos_valor" class="mask-moeda" placeholder="R$ 0,00">
+                    <label for="custos_obs">Observações sobre custos:</label>
+                    <textarea id="custos_obs" name="custos_obs" placeholder="Descreva quais são os custos (vigilância, limpeza, IPTU, etc)..."></textarea>
+                </div>
+            </div>
+
+            <!-- ── Outros Interessados ── -->
+            <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+                Outros Interessados
+            </h4>
+            <div class="form-group editavel">
+                <label>Há outros interessados no imóvel?</label>
+                <div class="radio-group" id="group-outros-interessados">
+                    <label class="radio-option"><input type="radio" name="outros_interessados" value="Sim"> Sim</label>
+                    <label class="radio-option"><input type="radio" name="outros_interessados" value="Não" checked> Não</label>
+                </div>
+                <div id="bloco-outros-interessados" style="display: none; flex-direction: column; gap: 6px; margin-top: 15px;">
+                    <label for="outros_interessados_desc">Identificação dos outros interessados e manifestações:</label>
+                    <textarea id="outros_interessados_desc" name="outros_interessados_desc" placeholder="Descreva os outros interessados (outros órgãos públicos, entidades, etc) e a situação de suas solicitações..."></textarea>
+                </div>
+            </div>
+
+            <!-- ── Anexos / Links ─────────────────────────────────────── -->
+            <div class="form-group editavel">
+                <div class="dynamic-list-wrapper" style="margin-top: 10px;">
+                    <button type="button" class="btn-add" id="btnAdicionarDocumento05">
+                        ＋ Adicionar link/documento
+                    </button>
+                    <div id="documentos-list-05"></div>
+                </div>
+            </div>
+
+            <!-- ── Botões ───────────────────────────────────────────────────── -->
+                        <!-- Botões -->
+            <div class="button-group" style="margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #ccc; padding-top: 20px;">
+                <button type="button" class="btn-secondary" id="btnLimpar" style="font-size: 1.1em; padding: 12px 24px; border-radius: 6px;">🗑️ Limpar</button>
+                <button type="button" id="btnImprimir" style="font-size: 1.1em; padding: 12px 24px; border-radius: 6px; background-color: #0284c7; color: white; border: none; cursor: pointer;" onclick="window.print()">🖨️ Imprimir</button>
+                <button type="submit" id="btnEnviar" class="btn-action" style="font-size: 1.1em; padding: 12px 24px; background-color: #28a745; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">💾 Salvar e Avançar ➡</button>
+            </div>
+</form>
+    </div>
+
+    <!-- Scripts do Motor -->
+    <script src="formulario.js?v=1782355313469"></script>
+    <script src="hints.js?v=1782355313469"></script>
+    <script src="foco-05.js?v=1782355313469"></script>
+    <script>
+        window.inicializarListaDocumentosDinamica('aba5', 'btnAdicionarDocumento05', 'documentos-list-05');
+    </script>
+    <script src="sync.js?v=99999_11"></script>
+</body>
+</html>

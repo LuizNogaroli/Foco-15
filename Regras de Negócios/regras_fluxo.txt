@@ -1,0 +1,49 @@
+Sim... A regra de negócio para esse fluxo é a seguinte:
+
+1a) No "Painel de Requerimentos", quando o requerimento está com status: "Aguardando análise" + Perfil: "Equipe Destinação" clica na lupa no painel de requerimentos (gatilho para mudança de status de "Aguardando análise" para "Indicação do Imóvel") e vai para aba 1 "Indicação do Imóvel";
+1b) Na aba 1 "Indicação do Imóvel", quando clica no botão "Salvar e Enviar", grava os dados na tabela_foco (acho que é esse o nome da tabela que salva os dados dos formulários (aba 1, 2 e 3) e muda o Status para "Diagnóstico Preliminar" e volta para o "Painel de Requerimentos".
+
+2a) No "Painel de Requerimentos", quando o requerimento está com status: "Diagnóstico Preliminar" + Perfil: "Equipe Caracterização" clica na lupa no painel de requerimentos e vai para aba 2 "Diagnóstico Preliminar"
+2b) Na aba 2 "Diagnóstico Preliminar", quando clica no botão "Salvar e Enviar", grava os dados na tabela_foco (acho que é esse o nome da tabela que salva os dados dos formulários (aba 1, 2 e 3) e muda o Status para "Análise de Viabilidade" e volta para o painel de requerimentos.
+
+3a) No "Painel de Requirimentos", quando o requerimento está com status: "Análise de Viabilidade" + Perfil: "Equipe Destinação" clica na lupa no painel de requerimentos e vai para aba 3 "Análise de Viabilidade e Proposta de Destinação"
+3b) após carregar os accordeons da aba 1, aba 2 e os rips selecionados, carrega o accordeon de devolução, sempre justificada;
+3c) Se a devolução for para "Indicação do Imóvel", muda a Tramitação para "Devolvido" e muda o Status para "Indicação do Imóvel"; 
+3d) Se a devolução for para "Diagnóstico Preliminar do Imóvel", muda a Tramitação para "Devolvido" e muda o Status para "Diagnóstico Preliminar"; 
+3d) Na aba 3 "Análise de Viabilidade e Proposta de Destinação", quando clica no botão "Salvar e Enviar", grava os dados na tabela_foco (acho que é esse o nome da tabela que salva os dados dos formulários (aba 1, 2 e 3) e muda o Status para "Validação - Chefia" e volta para o painel de requerimentos.
+
+4a) No "Painel de Requerimentos", processo com status "Validação - Chefia" + perfil "Chefia",
+vai para a aba 7 "Manifestações" e aprova ou devolve o processo.
+4b) Se aprova, muda o status para "Validação - Coordenação" e volta para o "Painel de Requerimentos";
+4c) Se devolve, muda o Trâmite para "Devolvido" e o Status para "Análise de Viabilidade".
+
+5a) No "Painel de Requerimentos", processo com status "Validação - Coordenação" + perfil "Coordenação", vai para a aba 7 "Manifestações" e aprova ou devolve o processo para aba 3
+5b) Se aprova, muda o status para "Deliberação - Superintendência" e volta para o "Painel de Requerimentos"
+5c) Se devolve, muda o Trâmite para "Devolvido" e o Status para "Análise de Viabilidade"
+
+6a) No "Painel de Requerimentos", processo com status "Deliberação - Superintendência" + perfil "Superintendência", vai para a aba 7 "Manifestações" e aprova ou devolve o processo.
+6b) Se aprova, muda o status para "Validação - Equipe C.G." e volta para o "Painel de Requerimentos"
+6c) Se devolve, muda o Trâmite para "Devolvido" e o Status para "Análise de Viabilidade"
+
+7a) No "Painel de Requerimentos", processo com status "Validação - Equipe C.G." + perfil "Equipe C.G.", vai para a aba 7 "Manifestações" e aprova o processo.
+7b) Se aprova, muda o status para "Validação - Coordenação-Geral" e volta para o "Painel de Requerimentos"
+7c) O perfil "Equipe C.G." não tem a capacidade de devolver o processo.
+
+8a) No "Painel de Requerimentos", processo com status "Validação - Coordenação-Geral" + perfil "Coordenação-Geral", vai para a aba 7 "Manifestações" e aprova ou devolve o processo.
+8b) Se aprova, muda o status para "Validação - Direção" e volta para o "Painel de Requerimentos"
+8c) Se devolve, muda o Trâmite para "Devolvido" e o Status para "Deliberação - Superintendência"
+
+9a) No "Painel de Requerimentos", processo com status "Validação - Direção" + perfil "Direção", vai para a aba 7 "Manifestações" e aprova ou devolve o processo.
+9b) Se aprova, muda o status para "Deliberação - CDE" e volta para o "Painel de Requerimentos"
+9c) Se devolve, muda o Trâmite para "Devolvido" e o Status para "Validação - Coordenação-Geral"
+
+
+10a) No "Painel de Requerimentos", processo com status "Deliberação - CDE" + perfil "CDE", vai para a aba 7 "Manifestações" e aprova ou devolve o processo.
+
+10b) Se a aprova processo, na sequência faz a seguinte pergunta: Processo de competência da Superintendência ou da CDE?
+
+10c) Se a competência é da Superintendência, status muda para "Deliberação - Superintendência",
+Tramitação continua "Normal", pois não é uma devolução propriamente dita e sim o fluxo normal,
+retorna para "Painel de Requerimentos"
+
+10d) Se a competência é da CDE, status muda para "Concluído - CDE", Tramitação continua "Normal" e volta para "Painel de Requerimentos"
