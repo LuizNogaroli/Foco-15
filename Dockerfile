@@ -34,8 +34,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copiar os arquivos do projeto
 COPY . .
 
-# Instalar dependências do PHP e Node.js
-RUN composer install --no-dev --optimize-autoloader
+# Instalar dependências do PHP e Node.js.
+# O diretório bootstrap/cache precisa existir para o package:discover funcionar
+RUN mkdir -p bootstrap/cache \
+    && cp .env.example .env \
+    && composer install --no-dev --optimize-autoloader \
+    && rm .env
+
 RUN npm install && npm run build
 
 # Ajustar permissões para o Laravel poder escrever logs e arquivos de cache
