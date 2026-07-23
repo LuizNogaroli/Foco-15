@@ -526,6 +526,9 @@ class ProcessoController extends Controller
             if (!$isRascunho) {
                 if ($acao === 'chefia') {
                     $opcao = $request->input('decl_chefia_opcao');
+                    if (empty($opcao)) {
+                        return back()->withErrors(['decl_chefia_opcao' => 'É obrigatório selecionar uma das opções (Suficiente ou Insuficiente) antes de enviar.'])->withInput();
+                    }
                     if ($opcao === 'suficiente') {
                         $processo->status_atual = 'Validação - Coordenação';
                     } elseif ($opcao === 'insuficiente') {
@@ -534,6 +537,9 @@ class ProcessoController extends Controller
                     }
                 } elseif ($acao === 'coordenacao') {
                     $opcao = $request->input('decl_coordenacao_opcao');
+                    if (empty($opcao)) {
+                        return back()->withErrors(['decl_coordenacao_opcao' => 'É obrigatório selecionar uma das opções (Suficiente ou Insuficiente) antes de enviar.'])->withInput();
+                    }
                     if ($opcao === 'suficiente') {
                         $processo->status_atual = 'Deliberação - Superintendência';
                     } elseif ($opcao === 'insuficiente') {
