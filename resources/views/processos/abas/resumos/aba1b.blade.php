@@ -11,7 +11,7 @@
 </div>
 
 <script>
-(async function() {
+document.addEventListener('DOMContentLoaded', async function() {
   const container = document.getElementById('rips-aba7-container');
   const processId = window.CURRENT_PROCESS_ID || "{{ $processo->numero_requerimento ?? '' }}";
   const SUPA_URL = window.SUPABASE_URL || 'https://rzdmnzuweyzhilfcungl.supabase.co';
@@ -108,7 +108,7 @@
     </div></div>`;
     if (container) container.appendChild(block);
   });
-})();
+});
 </script>
 @else
 <div style="display: flex; flex-direction: column; gap: 10px;" id="rips-aba7-mysql">
@@ -123,7 +123,7 @@
     </div>
   </div>
   <script>
-    (async function() {
+    document.addEventListener('DOMContentLoaded', async function() {
       const el = document.getElementById('rip-spu-aba7-{{ $loop->index }}');
       let d = {};
       try { if (typeof window.fetchSPU === 'function') d = await window.fetchSPU('{{ $rip->numero_rip }}'); } catch(e) {}
@@ -150,7 +150,7 @@
         ${f('Data da Avaliação', d.data_avaliacao)}
         ${f('Instrumento de Avaliação', d.instrumento_avaliacao)}
       </div>`;
-    })();
+    });
   </script>
   @endforeach
 
