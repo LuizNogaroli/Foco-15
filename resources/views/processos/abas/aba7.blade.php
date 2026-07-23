@@ -144,13 +144,9 @@ iframe.resumo-frame { width: 100%; height: 72vh; min-height: 520px; border: none
                 <span class="acordeao-seta">▼</span>
             </div>
             <div class="acordeao-corpo" style="padding: 15px; background: #fff;">
-                @if(!empty($dados1))
-                    <div class="report-container">
-                        @include('processos.abas.resumos.aba1b')
-                    </div>
-                @else
-                    <div class="hist-empty">Nenhum dado preenchido para esta etapa.</div>
-                @endif
+                <div class="report-container">
+                    @include('processos.abas.resumos.aba1b')
+                </div>
             </div>
         </div>
 
