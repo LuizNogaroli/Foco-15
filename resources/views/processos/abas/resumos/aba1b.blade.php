@@ -5,7 +5,7 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', async function() {
+(async function() {
   const container = document.getElementById('rips-aba7-container');
   const processId = window.CURRENT_PROCESS_ID || "{{ $processo->numero_requerimento ?? '' }}";
   const SUPA_URL = window.SUPABASE_URL || 'https://rzdmnzuweyzhilfcungl.supabase.co';
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   if (!processId || !SUPA_URL || !SUPA_KEY) { 
       console.warn('[Aba7-RIP] Variáveis ausentes, abortando.'); 
-      container.innerHTML = '<p style="color:#64748b;font-style:italic;">Erro de configuração. Não foi possível carregar os RIPs.</p>';
+      if (container) container.innerHTML = '<p style="color:#64748b;font-style:italic;">Erro de configuração. Não foi possível carregar os RIPs.</p>';
       return; 
   }
 
@@ -51,10 +51,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     } catch (e) { console.error('[Aba7-RIP] Erro ao consultar tabela_requerimentos:', e); }
   }
 
-  container.innerHTML = '';
+  if (container) container.innerHTML = '';
   
   if (rips.length === 0 && cadastros.length === 0) {
-    container.innerHTML = '<p style="color:#64748b;font-style:italic;">Nenhum RIP ou Cadastro Mínimo associado a este processo.</p>';
+    if (container) container.innerHTML = '<p style="color:#64748b;font-style:italic;">Nenhum RIP ou Cadastro Mínimo associado a este processo.</p>';
     return;
   }
 
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       ${buildField('Data da Avaliação', dadosSPU.data_avaliacao)}
       ${buildField('Instrumento de Avaliação', dadosSPU.instrumento_avaliacao)}
     </div></div>`;
-    container.appendChild(block);
+    if (container) container.appendChild(block);
   }
 
   cadastros.forEach((cad, idx) => {
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       ${buildField('Área Estimada (m²)', cad.area)}
       ${buildField('Observações', cad.observacoes)}
     </div></div>`;
-    container.appendChild(block);
+    if (container) container.appendChild(block);
   });
-});
+})();
 </script>
