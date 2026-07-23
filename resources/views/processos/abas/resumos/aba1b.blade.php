@@ -1,6 +1,12 @@
+@php
+  $focoRips = $processo->foco?->rips ?? collect();
+  $focoCadastros = $processo->foco?->cadastrosMinimos ?? collect();
+@endphp
+
+@if($focoRips->isEmpty() && $focoCadastros->isEmpty())
 <div style="display:flex;flex-direction:column;">
     <div id="rips-aba7-container">
-        <p style="color:#64748b; font-style:italic;">Carregando informações dos RIPs...</p>
+        <p style="color:#64748b; font-style:italic;">Carregando informações dos RIPs via Supabase...</p>
     </div>
 </div>
 
@@ -12,7 +18,6 @@
   const SUPA_KEY = window.SUPABASE_ANON_KEY;
 
   if (!processId || !SUPA_URL || !SUPA_KEY) { 
-      console.warn('[Aba7-RIP] Variáveis ausentes, abortando.'); 
       if (container) container.innerHTML = '<p style="color:#64748b;font-style:italic;">Erro de configuração. Não foi possível carregar os RIPs.</p>';
       return; 
   }
@@ -105,3 +110,65 @@
   });
 })();
 </script>
+@else
+<div style="display: flex; flex-direction: column; gap: 10px;" id="rips-aba7-mysql">
+  @foreach($focoRips as $rip)
+  <div style="background:white;border:1px solid #cbd5e1;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+    <div style="background:#e2e8f0;color:#1e293b;padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:0.95em;" onclick="const b=this.nextElementSibling;const i=this.querySelector('span:last-child');if(b.style.display==='none'){b.style.display='block';i.style.transform='rotate(180deg)';}else{b.style.display='none';i.style.transform='rotate(0deg)';}">
+      <span>🏠 Imóvel (RIP): {{ $rip->numero_rip }}</span>
+      <span style="transition:transform 0.2s;">▼</span>
+    </div>
+    <div style="padding:16px;display:none;background:#fff;" id="rip-spu-aba7-{{ $loop->index }}">
+      <p style="color:#64748b;font-style:italic;font-size:0.85rem;">Carregando dados do SPU...</p>
+    </div>
+  </div>
+  <script>
+    (async function() {
+      const el = document.getElementById('rip-spu-aba7-{{ $loop->index }}');
+      let d = {};
+      try { if (typeof window.fetchSPU === 'function') d = await window.fetchSPU('{{ $rip->numero_rip }}'); } catch(e) {}
+      function f(l,v){return `<div style="display:flex;align-items:baseline;margin-bottom:6px;font-size:0.9rem;"><span style="width:240px;font-weight:600;color:#334155;">${l}:</span><span style="flex:1;margin-left:6px;padding:3px 10px;background:#f1f5f9;border-radius:3px;">${v||'-'}</span></div>`;}
+      if (el) el.innerHTML = `<div>
+        ${f('Conceituação do Imóvel', d.conceituacao)}
+        ${f('Condição de Urbanização', d.condicao_urbanizacao)}
+        ${f('Natureza do Terreno', d.natureza || d.natureza_terreno)}
+        ${f('Tipo de Imóvel', d.tipo_imovel)}
+        ${f('CEP', d.cep)}
+        ${f('Logradouro', d.logradouro || d.endereco)}
+        ${f('Bairro', d.bairro)}
+        ${f('Município / UF', (d.municipio || '') + ' / ' + (d.uf || ''))}
+        ${f('Área Total (m²)', d.area_total)}
+        ${f('Área da União (m²)', d.area_uniao || d.area_terreno_uniao)}
+        ${f('Área Construída Total (m²)', d.area_construida_total)}
+        ${f('Área Construída Disponível (m²)', d.area_construida_disponivel)}
+        ${f('Área de Terreno Disponível (m²)', d.area_terreno_disponivel)}
+        ${f('Benfeitorias', d.benfeitorias)}
+        ${f('Situação da Incorporação', d.situacao_incorporacao || d.situacao)}
+        ${f('Processo de Incorporação', d.processo_incorporacao)}
+        ${f('LPM/1831 ou LMEO Homologadas?', d.lpm_homologada)}
+        ${f('Valor da Avaliação (R$)', d.valor_avaliado || d.valor_avaliacao)}
+        ${f('Data da Avaliação', d.data_avaliacao)}
+        ${f('Instrumento de Avaliação', d.instrumento_avaliacao)}
+      </div>`;
+    })();
+  </script>
+  @endforeach
+
+  @foreach($focoCadastros as $cad)
+  <div style="background:white;border:1px solid #cbd5e1;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+    <div style="background:#e2e8f0;color:#1e293b;padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:0.95em;" onclick="const b=this.nextElementSibling;const i=this.querySelector('span:last-child');if(b.style.display==='none'){b.style.display='block';i.style.transform='rotate(180deg)';}else{b.style.display='none';i.style.transform='rotate(0deg)';}">
+      <span>📝 Cadastro Mínimo #{{ $loop->iteration }} (Sem RIP)</span>
+      <span style="transition:transform 0.2s;">▼</span>
+    </div>
+    <div style="padding:16px;display:none;background:#fff;">
+      <div style="display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:baseline;margin-bottom:6px;font-size:0.9rem;"><span style="width:240px;font-weight:600;color:#334155;">CEP:</span><span style="flex:1;margin-left:6px;padding:3px 10px;background:#f1f5f9;border-radius:3px;">{{ $cad->cep ?: '-' }}</span></div>
+        <div style="display:flex;align-items:baseline;margin-bottom:6px;font-size:0.9rem;"><span style="width:240px;font-weight:600;color:#334155;">Área Estimada (m²):</span><span style="flex:1;margin-left:6px;padding:3px 10px;background:#f1f5f9;border-radius:3px;">{{ $cad->area ?: '-' }}</span></div>
+        <div style="display:flex;align-items:baseline;margin-bottom:6px;font-size:0.9rem;"><span style="width:240px;font-weight:600;color:#334155;">Logradouro:</span><span style="flex:1;margin-left:6px;padding:3px 10px;background:#f1f5f9;border-radius:3px;">{{ $cad->logradouro ?: '-' }} {{ $cad->numero ? ', nº '.$cad->numero : '' }}</span></div>
+        <div style="display:flex;align-items:baseline;margin-bottom:6px;font-size:0.9rem;"><span style="width:240px;font-weight:600;color:#334155;">Município / UF:</span><span style="flex:1;margin-left:6px;padding:3px 10px;background:#f1f5f9;border-radius:3px;">{{ $cad->municipio ?: '-' }} / {{ $cad->uf ?: '-' }}</span></div>
+      </div>
+    </div>
+  </div>
+  @endforeach
+</div>
+@endif
